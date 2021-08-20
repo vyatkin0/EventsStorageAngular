@@ -1,5 +1,5 @@
-# EventsStorage
-Example of asp .net 5.0 mvc web application that uses Razor pages with Material Design web components.
+# EventsStorageAngular
+Example of asp .net 5.0 SPA web application that uses Angular Material Design web components.
 
 These are generic installation instructions.
 
