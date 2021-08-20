@@ -1,0 +1,25 @@
+<h1 mat-dialog-title appTabIndex="-5">Upload File</h1>
+<div mat-dialog-content>
+  <div class="file-form">
+    <div class="form-field-container">
+      <!--https://codepen.io/Josantonius/pen/BzNwXz-->
+      <input type="text" id="fileName" readonly placeholder="Maximum file size is 10MB" [ngModel] = "fileToUpload.name">
+      <button mat-button id="file-upload-wrapper" [disabled]="uploading">
+        <span>Browse</span>
+        <input type="file" name="formFile" class="upload"
+          (ngModel) = "fileToUpload"
+          (change)="onChangeFile($event)"
+          title="Select file"
+          placeholder="Select file"
+          [disabled]="uploading"
+          />
+      </button>
+  </div>
+  </div>
+  <div class="error-info" *ngIf="error">{{error}}</div>
+  <div class="result-info" *ngIf="lastResult">File uploaded successfully, id {{lastResult.id}}</div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onUpload()" [disabled]="!fileToUpload || uploading">Upload</button>
+  <button mat-button mat-dialog-close cdkFocusInitial [disabled]="uploading">Close</button>
+</div>

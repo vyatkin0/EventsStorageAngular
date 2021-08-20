@@ -1,0 +1,29 @@
+table {
+  width: 100%;
+}
+
+.bottom-toolbar {
+  margin: 10px 0;
+}
+
+.bottom-toolbar > * {
+  margin-left: 8px;
+}
+
+.spinner-container {
+  display: flex;
+  align-items: center;
+}
+
+.subject-filter {
+  width: 300px;
+}
+
+.event-file {
+  display: flex;
+  align-items: center;
+}
+
+.clickable {
+  cursor:pointer;
+}

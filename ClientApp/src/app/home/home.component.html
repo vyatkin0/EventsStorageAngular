@@ -1,0 +1,88 @@
+<h2>Events</h2>
+<mat-chip-list aria-label="Subject selection">
+  <mat-chip *ngFor="let subject of subjects" id="subject.id" >{{subject.name + ' ' + subject.id}}</mat-chip>
+</mat-chip-list>
+<app-search-box #subjectSearch="appSearchBox"
+  inputPlaceholder="Subject"
+  entities="subjects"
+  notFound="Subjects are not found"
+  hint="Start typing here Id or Name of a subject"
+  formFieldClass="subject-filter">
+</app-search-box>
+<div class="mat-elevation-z8">
+  <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+    <mat-spinner></mat-spinner>&nbsp;&nbsp;Loading data&hellip;
+  </div>
+  <table mat-table [dataSource]="dataSource">
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row.id) : null"
+                      [checked]="selection.isSelected(row.id)"
+                      [aria-label]="checkboxLabel(row.id)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> Id </th>
+      <td mat-cell *matCellDef="let event"> {{event.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="subjectId">
+      <th mat-header-cell *matHeaderCellDef> Subject Id </th>
+      <td mat-cell *matCellDef="let event"> {{event.subject.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="subjectName">
+      <th mat-header-cell *matHeaderCellDef> Subject Name </th>
+      <td mat-cell *matCellDef="let event"> {{event.subject.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef> Description </th>
+      <td mat-cell *matCellDef="let event"> {{event.description}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef> Created at </th>
+      <td mat-cell *matCellDef="let event"> {{event.createdAt}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="file">
+      <th mat-header-cell *matHeaderCellDef> Files </th>
+      <td mat-cell *matCellDef="let event">
+        <div class="event-file" *ngFor="let file of event.files; index as i; first as isFirst">
+          <span class="clickable" (click)="onDeleteFile(file.id)" title="Delete file">
+            <mat-icon color="primary">delete</mat-icon>
+          </span>
+          <a href="/Home/DownloadFile?id={{file.id}}" title="Download file">{{file.name}}</a>
+        </div>
+        <span class="clickable" (click)="openAddFileDialog(event.id)" title="Add file">
+          <mat-icon color="primary">add_circle</mat-icon>
+        </span>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+      (click)="selection.toggle(row)">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[10, 25, 100]" showFirstLastButtons></mat-paginator>
+</div>
+<div class="bottom-toolbar">
+  <button mat-raised-button color="primary" (click)="openConfirmDeleteDialog()" title="Delete Selected Events">Delete Selected Events</button>
+  <button mat-raised-button color="primary" (click)="openAddSubjectDialog()" title="Add Subject">Add Subject</button>
+  <button mat-raised-button color="primary" (click)="openAddEventDialog()" title="Add Event">Add Event</button>
+</div>

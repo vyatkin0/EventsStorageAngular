@@ -1,0 +1,16 @@
+<mat-form-field appearance="outline" [class]="formFieldClass">
+  <mat-label>{{inputPlaceholder}}</mat-label>
+  <input matInput #menuInput="matInput" [placeholder]='inputPlaceholder'
+    [value]="menuSelectedItem ? menuSelectedItem.id+' - ' + menuSelectedItem.name : ''" (input)="onInput($event)"
+    (keydown)="onKeyDown($event)" type="search" autocomplete="off">
+  <mat-menu #inputMenu="matMenu" (closed)="menuInput.focus()">
+    <ng-template matMenuContent>
+      <button mat-menu-item (click)="setMenuSelectedItem(item)"
+        *ngFor="let item of menuItems; index as i; first as isFirst">
+        {{item.id}} - {{item.name}}
+      </button>
+    </ng-template>
+  </mat-menu>
+  <div [matMenuTriggerFor]="inputMenu"></div>
+  <mat-hint>{{hint}}</mat-hint>
+</mat-form-field>

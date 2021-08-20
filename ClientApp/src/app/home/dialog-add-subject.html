@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Subject</h1>
+<div mat-dialog-content>
+  <div class="tribe-form">
+   <mat-form-field  appearance="outline" class="field-full-width">
+    <mat-label>Name</mat-label>
+    <input matInput type="text" placeholder="Name" [(ngModel)] = "name">
+   </mat-form-field>
+   <mat-form-field appearance="outline">
+    <mat-label>Creation Date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)] = "createdOn">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  </div>
+  <div class="error-info" *ngIf="error">{{error}}</div>
+  <div class="result-info" *ngIf="lastResult">Subject successfully added, id {{lastResult.id}}</div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="addSubject()" [disabled]="!name || !createdOn">Add</button>
+  <button mat-button mat-dialog-close>Close</button>
+</div>
