@@ -8,9 +8,9 @@ namespace EventsStorage.Models
     public class AddEventModel
     {
         [Required]
-        public int SubjectId { get; set; }
+        public int subjectId { get; set; }
         [Required]
-        public string Description { get; set; }
+        public string description { get; set; }
     }
 
     public class AddSubjectModel
@@ -20,6 +20,12 @@ namespace EventsStorage.Models
 
         [Required]
         public DateTime createdOn { get; set; }
+    }
+
+    public class GetEventModel
+    {
+        [Required]
+        public long id { get; set; }
     }
 
     public class SubjectsModel

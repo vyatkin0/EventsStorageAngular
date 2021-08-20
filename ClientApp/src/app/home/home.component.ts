@@ -2,10 +2,10 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { DialogAddEvent, DialogAddFile, DialogAddSubject, DialogConfirmDeleteFile } from './dialog.components';
 import { EventInfo, EventSubject, EventsDataSource, EventsInfo } from './events-data-source';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { deleteEntity, getEntity } from '../../utils';
 
 import { MatPaginator } from '@angular/material/paginator';
 import {SelectionModel} from '@angular/cdk/collections';
-import { deleteEntity } from '../../utils';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -53,8 +53,14 @@ export class HomeComponent implements AfterViewInit, OnInit {
       this.paginator.pageIndex = result ? result.offset/result.count : 0;
   }
 
-  openAddFileDialog(eventId: number) {
-    this.dialog.open(DialogAddFile, {...this.dialogOptions, data: { eventId }});
+  openAddFileDialog(row: EventInfo,) {
+    this.dialog.open(DialogAddFile, {...this.dialogOptions, data: { eventId:row.id }})
+    .afterClosed()
+    .subscribe(result => {
+      if(result==='added') {
+        this.updateEventRow(row);
+      }
+    });
   }
 
   openAddSubjectDialog() {
@@ -65,17 +71,27 @@ export class HomeComponent implements AfterViewInit, OnInit {
     this.dialog.open(DialogConfirmDeleteFile, this.dialogOptions);
   }
 
-  onDeleteFile(id: number) {
+  onDeleteFile(row: EventInfo, id: number) {
     this.dialog.open(DialogConfirmDeleteFile, this.dialogOptions)
     .afterClosed()
-    .subscribe(result => {
-      if(result==='delete') this.deleteFile(id);
+    .subscribe(async result => {
+      if(result==='delete')
+      {
+        await deleteEntity({id},'file')
+        this.updateEventRow(row);
+      }
     });
   }
 
-  deleteFile(id: number) {
-    deleteEntity({id},'file');
+  async updateEventRow(row: EventInfo)
+  {
+    const e: EventInfo = await getEntity({id:row.id},'event');
+    row.createdAt = e.createdAt;
+    row.description = e.description;
+    row.files = e.files;
+    row.subject = e.subject;
   }
+
   openAddEventDialog() {
     this.dialog.open(DialogAddEvent, this.dialogOptions)
     .afterClosed()

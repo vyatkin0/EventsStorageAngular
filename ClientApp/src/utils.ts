@@ -19,19 +19,21 @@ export function dateToString (date: Date): string {
   return '';
 }
 
-
-export function getEntities(search: string, exclude: number[], apiPath: string) {
+export async function getEntities(search: string, exclude: number[], apiPath: string) {
   return postFetch({ search, exclude }, apiPath);
 }
 
-export function addEntity(entity: object, apiPath: string) {
+export async function getEntity(entity: object, apiPath: string) {
+  return postFetch(entity, 'get'+apiPath);
+}
+
+export async function addEntity(entity: object, apiPath: string) {
   return postFetch(entity, 'add'+apiPath);
 }
 
-export function deleteEntity(entity: object, apiPath: string) {
+export async function deleteEntity(entity: object, apiPath: string) {
   return postFetch(entity, 'delete'+apiPath);
 }
-
 
 export async function uploadFile(formData: FormData, apiPath: string) {
   const request: RequestInit = {

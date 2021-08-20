@@ -76,6 +76,17 @@ namespace EventsStorage.Controllers
         }
 
         [HttpPost]
+        public IActionResult GetEvent(GetEventModel model)
+        {
+            return Ok(_ctx.Events.Include(e=>e.Files)
+                .Include(e=>e.Subject)
+                .Where(e=> e.Id == model.id)
+                .OrderByDescending(e=>e.Id)
+                .AsNoTracking()
+                .SingleOrDefault());
+        }
+
+        [HttpPost]
         public IActionResult UploadFile([FromForm] UploadEventFileModel model)
         {
             EventFile file = new EventFile
@@ -162,8 +173,8 @@ namespace EventsStorage.Controllers
         public IActionResult AddEvent(AddEventModel model)
         {
             AppEvent e = new AppEvent{
-                SubjectId = model.SubjectId,
-                Description = model.Description,
+                SubjectId = model.subjectId,
+                Description = model.description,
                 CreatedAt = DateTime.UtcNow
             };
 

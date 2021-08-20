@@ -17,8 +17,9 @@ export class DialogAddFile {
   lastResult?: AppEntity;
   fileToUpload: File;
   uploading: boolean = false;
+  added: boolean = false;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {eventId: string}) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {eventId: string}, public dialogRef: MatDialogRef<DialogAddEvent>) { }
 
   onChangeFile(event: Event) {
       const files: FileList = (event.target as any)?.files;
@@ -36,8 +37,7 @@ export class DialogAddFile {
 
     try {
       this.lastResult = await uploadFile(formData, 'uploadFile');
-
-      //Reload events
+      this.added = true;
     }
     catch (e) {
       console.error(e);
@@ -47,6 +47,10 @@ export class DialogAddFile {
     finally{
       this.uploading = false;
     }
+  }
+
+  onClose(): void {
+    this.dialogRef.close(this.added ? 'added' : 'close');
   }
 }
 
@@ -126,7 +130,7 @@ export class DialogConfirmDeleteFile {
   constructor(public dialogRef: MatDialogRef<DialogAddEvent>) {
   }
 
-  deleteFile(): void {
+  onDeleteFile(): void {
     this.dialogRef.close('delete');
   }
 }

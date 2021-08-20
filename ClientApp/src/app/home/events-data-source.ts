@@ -29,7 +29,7 @@ export interface EventInfo{
   subject: EventSubject;
   description:string;
   createdAt: string;
-  files: string;
+  files: EventFile[];
 }
 
 export class EventsDataSource implements DataSource<EventInfo> {
