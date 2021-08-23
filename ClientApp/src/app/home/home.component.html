@@ -1,13 +1,17 @@
 <h2>Events</h2>
 <mat-chip-list aria-label="Subject selection">
-  <mat-chip *ngFor="let subject of subjects" id="subject.id" >{{subject.name + ' ' + subject.id}}</mat-chip>
+  <mat-chip *ngFor="let subject of subjects" [removable]="true" (removed)="removeSubject(subject.id)">
+    {{subject.id}} - {{subject.name|trimEllipsis}}
+    <mat-icon matChipRemove>cancel</mat-icon>
+  </mat-chip>
 </mat-chip-list>
 <app-search-box #subjectSearch="appSearchBox"
   inputPlaceholder="Subject"
   entities="subjects"
   notFound="Subjects are not found"
   hint="Start typing here Id or Name of a subject"
-  formFieldClass="subject-filter">
+  formFieldClass="subject-filter"
+  (selected)="addSubject($event)">
 </app-search-box>
 <div class="mat-elevation-z8">
   <div class="spinner-container" *ngIf="dataSource.loading$ | async">
@@ -74,15 +78,13 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-      (click)="selection.toggle(row)">
-    </tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
   <mat-paginator [pageSizeOptions]="[10, 25, 100]" showFirstLastButtons></mat-paginator>
 </div>
 <div class="bottom-toolbar">
-  <button mat-raised-button color="primary" (click)="openConfirmDeleteDialog()" title="Delete Selected Events">Delete Selected Events</button>
+  <button mat-raised-button color="primary" (click)="openConfirmDeleteDialog()" [disabled]="!this.selection.selected.length" title="Delete Selected Events">Delete Selected Events</button>
   <button mat-raised-button color="primary" (click)="openAddSubjectDialog()" title="Add Subject">Add Subject</button>
   <button mat-raised-button color="primary" (click)="openAddEventDialog()" title="Add Event">Add Event</button>
 </div>

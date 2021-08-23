@@ -1,10 +1,10 @@
-import { Component, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
 import { getEntities } from '../../utils';
 
 export interface AppMenuItem {
-  id: string;
+  id?: number;
   name: string;
 }
 
@@ -16,7 +16,6 @@ export interface AppMenuItem {
   exportAs: 'appSearchBox'
 })
 export class AppSearchBox {
-
   inputPlaceholder:string;
   menuItems: AppMenuItem[] = [];
   searchTimerId: any = null;
@@ -26,6 +25,7 @@ export class AppSearchBox {
   exclude: number[] = [];
   formFieldClass: string='';
 
+  @Output() selected = new EventEmitter<AppMenuItem>(true);
   @Output() menuSelectedItem?: AppMenuItem;
   @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
   @ViewChild(MatMenu) inputMenu: MatMenu;
@@ -35,12 +35,12 @@ export class AppSearchBox {
       this.menuItems = await getEntities(search, this.exclude, this.queryPath);
 
       if (this.notFoundPlaceholder && this.menuItems.length < 1) {
-        this.menuItems = [{ id: '', name: this.notFoundPlaceholder }];
+        this.menuItems = [{ name: this.notFoundPlaceholder }];
       }
     }
     catch (e) {
       console.error(e);
-      this.menuItems = [{ id: '', name: 'Error: ' + e }];
+      this.menuItems = [{ name: 'Error: ' + e }];
       throw e;
     }
 
@@ -92,8 +92,10 @@ export class AppSearchBox {
       case 'Enter':
         {
           const value = (event.target as HTMLInputElement).value.trim();
-          this.startSearch(value, true);
-          event.stopPropagation();
+          if(value.length>0) {
+            this.startSearch(value, true);
+            event.stopPropagation();
+          }
         }
         break;
       case 'Escape':
@@ -104,11 +106,18 @@ export class AppSearchBox {
   }
 
   setMenuSelectedItem(item: AppMenuItem) {
-    if(item.id===''){
-      this.menuSelectedItem = undefined;
+
+    this.selected.emit(item);
+
+    if ( item.id ) {
+        this.menuSelectedItem = item;
+        return;
     }
-    else{
-    this.menuSelectedItem = item;
-    }
+
+    this.clearSelection();
+  }
+
+  clearSelection() {
+    this.menuSelectedItem = undefined;
   }
 }

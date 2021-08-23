@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { DialogAddEvent, DialogAddFile, DialogAddSubject, DialogConfirmDeleteFile } from './dialog.components';
-import { EventInfo, EventSubject, EventsDataSource, EventsInfo } from './events-data-source';
+import { AppMenuItem, AppSearchBox } from './app-search-box.component';
+import { DialogAddEvent, DialogAddFile, DialogAddSubject, DialogConfirm } from './dialog.components';
+import { EventInfo, EventsDataSource, EventsInfo } from './events-data-source';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { deleteEntity, getEntity } from '../../utils';
 
@@ -16,8 +17,11 @@ import { tap } from 'rxjs/operators';
 export class HomeComponent implements AfterViewInit, OnInit {
   displayedColumns: string[] = ['select', 'id', 'subjectId', 'subjectName', 'description', 'createdAt', 'file'];
   dataSource = new EventsDataSource();
-  subjects: EventSubject[];
+  subjects: AppMenuItem[] = [];
   selection = new SelectionModel<number>(true, []);
+  currentPageEvents: EventInfo[] = [];
+
+  @ViewChild('subjectSearch') subjectSearch: AppSearchBox;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -26,31 +30,29 @@ export class HomeComponent implements AfterViewInit, OnInit {
   dialogOptions: MatDialogConfig = {autoFocus: true, disableClose:true, restoreFocus:true};
 
   async ngOnInit() {
-    const result : EventsInfo|null = await this.dataSource.loadEvents(
-      0,
-      10);
-
-    this.paginator.length = result ? result.total : 0;
-    this.paginator.pageSize = result ? result.count : 10;
-    this.paginator.pageIndex = result ? result.offset/result.count : 0;
+    this.loadEventsPage(0, 10);
   }
 
   ngAfterViewInit() {
     this.paginator.page
         .pipe(
-            tap(() => this.loadEventsPage(this.paginator.pageIndex))
+            tap(() => this.loadEventsPage(this.paginator.pageIndex, this.paginator.pageSize))
         )
         .subscribe();
   }
 
-  async loadEventsPage(pageIndex: number) {
+  async loadEventsPage(pageIndex: number, pageSize: number) {
       const result : EventsInfo|null = await this.dataSource.loadEvents(
           pageIndex,
-          this.paginator.pageSize);
+          pageSize,
+          this.subjects.map(s=>s.id as number));
 
+      this.selection.clear();
+
+      this.currentPageEvents = result ? result.events : [] as EventInfo[];
       this.paginator.length = result ? result.total : 0;
-      this.paginator.pageSize = result ? result.count : 10;
-      this.paginator.pageIndex = result ? result.offset/result.count : 0;
+      this.paginator.pageSize = result ? result.count : pageSize;
+      this.paginator.pageIndex = result ? result.offset/result.count : pageIndex;
   }
 
   openAddFileDialog(row: EventInfo,) {
@@ -68,14 +70,31 @@ export class HomeComponent implements AfterViewInit, OnInit {
   }
 
   openConfirmDeleteDialog() {
-    this.dialog.open(DialogConfirmDeleteFile, this.dialogOptions);
+    this.dialog.open(DialogConfirm, {...this.dialogOptions, data: {
+      title:'Delete Events',
+      message:'Do you really want to delete selected events?',
+    }}).afterClosed()
+    .subscribe(async result => {
+      if(result==='yes')
+      {
+        await deleteEntity({ids:this.selection.selected},'events');
+        let pageIndex = this.paginator.pageIndex;
+        if(pageIndex>0 && this.isAllSelected()) {
+          --pageIndex;
+        }
+
+        this.loadEventsPage(pageIndex, this.paginator.pageSize);
+      }
+    });
   }
 
   onDeleteFile(row: EventInfo, id: number) {
-    this.dialog.open(DialogConfirmDeleteFile, this.dialogOptions)
-    .afterClosed()
+    this.dialog.open(DialogConfirm, {...this.dialogOptions, data: {
+      title:'Delete File',
+      message:'Do you really want to delete file?',
+    }}).afterClosed()
     .subscribe(async result => {
-      if(result==='delete')
+      if(result==='yes')
       {
         await deleteEntity({id},'file')
         this.updateEventRow(row);
@@ -96,14 +115,16 @@ export class HomeComponent implements AfterViewInit, OnInit {
     this.dialog.open(DialogAddEvent, this.dialogOptions)
     .afterClosed()
     .subscribe(result => {
-      if(result==='updated') this.loadEventsPage(this.paginator.pageIndex);
+      if(result==='updated') {
+        this.loadEventsPage(this.paginator.pageIndex,this.paginator.pageSize);
+      }
     });
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.currentPageEvents.length;
     return numSelected === numRows;
   }
 
@@ -114,7 +135,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
       return;
     }
 
-    this.selection.select(...(this.dataSource.data.map(e=>e.id)));
+    this.selection.select(...(this.currentPageEvents.map(e=>e.id)));
   }
 
   /** The label for the checkbox on the passed row */
@@ -123,5 +144,18 @@ export class HomeComponent implements AfterViewInit, OnInit {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
     return `${this.selection.isSelected(row.id) ? 'deselect' : 'select'} row ${row.id + 1}`;
+  }
+
+  addSubject(subject:AppMenuItem) {
+    this.subjects.push(subject);
+    this.subjectSearch.clearSelection();
+    this.loadEventsPage(0, this.paginator.pageSize);
+  }
+  removeSubject(id:number|undefined) {
+
+    if(id === undefined) return;
+
+    this.subjects = this.subjects.filter(s=>s.id!==id);
+    this.loadEventsPage(0, this.paginator.pageSize);
   }
 }

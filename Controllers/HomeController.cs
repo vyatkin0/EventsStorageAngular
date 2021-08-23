@@ -47,14 +47,6 @@ namespace EventsStorage.Controllers
                     .Where(c => ids.Contains(c.Id))
                     .ToArray();
 
-            foreach (EventSubject es in eventSubjects)
-            {
-                if (es.Name.Length > 10)
-                {
-                    es.Name = es.Name.Substring(0, 7) + "...";
-                }
-            }
-
             AppEvent[] events = _ctx.Events
                 .Include(e=>e.Files)
                 .Include(e=>e.Subject)
@@ -217,7 +209,7 @@ namespace EventsStorage.Controllers
         public IActionResult DeleteEvents(DeleteEventsModel model)
         {
             if(model.ids.Length<1){
-                return Ok("Success");
+                return Json("Success");
             }
 
             long[] missedIds = model.ids.Where(i=>!_ctx.Events.Any(e=>e.Id==i)).ToArray();
@@ -232,7 +224,7 @@ namespace EventsStorage.Controllers
             _ctx.Events.RemoveRange(events);
             _ctx.SaveChanges();
 
-            return Ok("Success");
+            return Json("Success");
         }
     }
 }

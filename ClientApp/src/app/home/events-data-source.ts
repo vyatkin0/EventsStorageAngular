@@ -37,7 +37,6 @@ export class EventsDataSource implements DataSource<EventInfo> {
   private eventsSubject = new BehaviorSubject<EventInfo[]>([]);
   private loadingRelations = new BehaviorSubject<boolean>(false);
 
-  public data : EventInfo[] = [];
   public loading$ = this.loadingRelations.asObservable();
 
   connect(collectionViewer: CollectionViewer): Observable<EventInfo[]> {
@@ -49,13 +48,12 @@ export class EventsDataSource implements DataSource<EventInfo> {
       this.loadingRelations.complete();
   }
 
-  async loadEvents(pageIndex=0, pageSize=10) : Promise<EventsInfo|null> {
+  async loadEvents(pageIndex:number, pageSize:number, subjects:number[]|null) : Promise<EventsInfo|null> {
 
       this.loadingRelations.next(true);
-      this.data = [];
 
       try {
-        const result : EventsInfo = await postFetch({offset: pageIndex*pageSize, count:pageSize}, 'Events');
+        const result : EventsInfo = await postFetch({offset: pageIndex*pageSize, count:pageSize, subjects}, 'Events');
 
         this.eventsSubject.next(result.events.map(i => ({
           id:i.id,
@@ -67,7 +65,6 @@ export class EventsDataSource implements DataSource<EventInfo> {
 
         this.loadingRelations.next(false);
 
-        this.data = result.events;
         return result;
       }
       catch(e){

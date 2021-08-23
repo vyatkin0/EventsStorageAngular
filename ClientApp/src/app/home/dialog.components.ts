@@ -120,17 +120,16 @@ export class DialogAddEvent {
   }
 }
 
-
 @Component({
-  selector: 'dialog-confirm-delete-file',
-  templateUrl: 'dialog-confirm-delete-file.html',
+  selector: 'dialog-confirm',
+  templateUrl: 'dialog-confirm.html',
   styleUrls: ['dialog.components.css'],
 })
-export class DialogConfirmDeleteFile {
-  constructor(public dialogRef: MatDialogRef<DialogAddEvent>) {
+export class DialogConfirm {
+  constructor(public dialogRef: MatDialogRef<DialogAddEvent>,
+    @Inject(MAT_DIALOG_DATA) public data: {title: string, message: string}) {
   }
-
-  onDeleteFile(): void {
-    this.dialogRef.close('delete');
+  onYes(): void {
+    this.dialogRef.close('yes');
   }
 }

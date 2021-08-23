@@ -1,4 +1,5 @@
-import { DialogAddEvent, DialogAddFile, DialogAddSubject, DialogConfirmDeleteFile } from './home/dialog.components';
+import { DialogAddEvent, DialogAddFile, DialogAddSubject, DialogConfirm } from './home/dialog.components';
+import { NgModule, Pipe, PipeTransform, } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {AppSearchBox} from './home/app-search-box.component';
@@ -7,8 +8,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { MaterialModule } from './material.module';
-import { NgModule } from '@angular/core';
 
+@Pipe({name: 'trimEllipsis'})
+export class TrimEllipsisPipe implements PipeTransform {
+  transform(value: string): string {
+    const maxlen = 10;
+
+    if (value.length > maxlen) {
+        return value.substr(0, maxlen-3) +'...';
+    }
+    return value;
+  }
+}
 @NgModule({
   declarations: [
     AppComponent,
@@ -16,8 +27,9 @@ import { NgModule } from '@angular/core';
     DialogAddSubject,
     DialogAddFile,
     DialogAddEvent,
-    DialogConfirmDeleteFile,
+    DialogConfirm,
     AppSearchBox,
+    TrimEllipsisPipe
   ],
   imports: [
     BrowserModule,

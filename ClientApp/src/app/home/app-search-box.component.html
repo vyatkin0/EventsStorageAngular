@@ -1,7 +1,7 @@
 <mat-form-field appearance="outline" [class]="formFieldClass">
   <mat-label>{{inputPlaceholder}}</mat-label>
   <input matInput #menuInput="matInput" [placeholder]='inputPlaceholder'
-    [value]="menuSelectedItem ? menuSelectedItem.id+' - ' + menuSelectedItem.name : ''" (input)="onInput($event)"
+    [value]="menuSelectedItem ? menuSelectedItem.id +' - ' + menuSelectedItem.name : ''" (input)="onInput($event)"
     (keydown)="onKeyDown($event)" type="search" autocomplete="off">
   <mat-menu #inputMenu="matMenu" (closed)="menuInput.focus()">
     <ng-template matMenuContent>
