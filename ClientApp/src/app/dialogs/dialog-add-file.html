@@ -3,7 +3,7 @@
   <div class="file-form">
     <div class="form-field-container">
       <!--https://codepen.io/Josantonius/pen/BzNwXz-->
-      <input type="text" id="fileName" readonly placeholder="Maximum file size is 10MB" [ngModel] = "fileToUpload?.name">
+      <input type="text" id="file-name" readonly placeholder="Maximum file size is 10MB" [ngModel] = "fileToUpload?.name">
       <button mat-button id="file-upload-wrapper" [disabled]="uploading">
         <span>Browse</span>
         <input type="file" name="formFile" class="upload"

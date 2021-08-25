@@ -1,11 +1,11 @@
 # EventsStorageAngular
-Example of asp .net 5.0 SPA web application that uses Angular Material Design web components.
+Example of asp .net 5.0 single page web application that based on Angular Material Design web components.
 
 These are generic installation instructions.
 
 Edit database connection string in file appsettings.json;
 
-Download and install ASP.NET Core SDK 5.0;
+Download and install ASP.NET SDK 5.0;
 
 In the solution's folder execute following commands:
 

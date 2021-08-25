@@ -1,8 +1,8 @@
-import { DialogAddEvent, DialogAddFile, DialogAddSubject, DialogConfirm } from './home/dialog.components';
+import { DialogAddEvent, DialogAddFile, DialogAddSubject, DialogConfirm } from './dialogs/dialog.components';
 import { NgModule, Pipe, PipeTransform, } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import {AppSearchBox} from './home/app-search-box.component';
+import {AppSearchBox} from './components/app-search-box.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';

@@ -1,12 +1,16 @@
+/** Application dialog components */
+
 import { Component, Inject, ViewChild } from '@angular/core';
 import { addEntity, dateToUrl, uploadFile } from '../../utils';
 
-import { AppSearchBox } from './app-search-box.component'
+import { AppSearchBox } from '../components/app-search-box.component'
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+/** Interface for returned objects from backend */
 interface AppEntity{
   id: number;
 }
+
 @Component({
   selector: 'dialog-add-file',
   templateUrl: 'dialog-add-file.html',

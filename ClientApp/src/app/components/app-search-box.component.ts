@@ -1,3 +1,5 @@
+/** Simple search box component with live search functionality */
+
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 
