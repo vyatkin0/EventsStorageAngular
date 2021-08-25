@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { AppMenuItem, AppSearchBox } from './app-search-box.component';
-import { DialogAddEvent, DialogAddFile, DialogAddSubject, DialogConfirm } from './dialog.components';
-import { EventInfo, EventsDataSource, EventsInfo } from './events-data-source';
+import { AppMenuItem, AppSearchBox } from '../components/app-search-box.component';
+import { DialogAddEvent, DialogAddFile, DialogAddSubject, DialogConfirm } from '../dialogs/dialog.components';
+import { EventInfo, EventsDataSource, EventsInfo } from '../events-data-source';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { deleteEntity, getEntity } from '../../utils';
 

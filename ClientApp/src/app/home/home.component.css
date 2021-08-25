@@ -2,6 +2,15 @@ table {
   width: 100%;
 }
 
+.clickable {
+  cursor:pointer;
+}
+
+.event-file {
+  display: flex;
+  align-items: center;
+}
+
 .bottom-toolbar {
   margin: 10px 0;
 }
@@ -17,13 +26,4 @@ table {
 
 .subject-filter {
   width: 300px;
-}
-
-.event-file {
-  display: flex;
-  align-items: center;
-}
-
-.clickable {
-  cursor:pointer;
 }

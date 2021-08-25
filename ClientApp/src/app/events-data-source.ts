@@ -1,6 +1,7 @@
+/** DataSource for events table on home page */
 import { BehaviorSubject, Observable } from 'rxjs';
 import {CollectionViewer, DataSource} from "@angular/cdk/collections";
-import {dateToString, postFetch} from '../../utils';
+import {dateToString, postFetch} from '../utils';
 
 export interface EventsInfo {
   events: EventInfo[];

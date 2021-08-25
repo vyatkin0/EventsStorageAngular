@@ -1,3 +1,4 @@
+/** Angular Material imports */
 import { Injectable, NgModule } from '@angular/core';
 import {MAT_DATE_LOCALE, MatNativeDateModule} from '@angular/material/core';
 import {MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';

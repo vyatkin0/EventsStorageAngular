@@ -2,21 +2,26 @@ input[type="file"] {
   height: 100%;
 }
 
-.subject-form, .file-form, .event-form {
-  width: 400px;
-  margin-bottom: 10px;
+.error-info {
+  color: red;
 }
 
 .field-full-width {
   width: 100%;
 }
 
-.error-info {
-  color: red;
-}
-
 .mat-dialog-actions {
   justify-content: flex-end;
+}
+
+.subject-form, .file-form, .event-form {
+  width: 400px;
+  margin-bottom: 10px;
+}
+
+#file-name {
+  border: none;
+  width: 100%;
 }
 
 #file-upload-wrapper input.upload {
@@ -29,9 +34,4 @@ input[type="file"] {
   cursor: pointer;
   opacity: 0;
   filter: alpha(opacity=0);
-}
-
-#fileName {
-  border: none;
-  width: 100%;
 }

@@ -1,5 +1,5 @@
 /**
- * Параметры подключения и вызова REST методов сервиса приложения
+ * Configuration for fetching backend methods
  */
 
 declare let process: any;
