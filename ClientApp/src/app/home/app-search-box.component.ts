@@ -50,12 +50,14 @@ export class AppSearchBox {
   startSearch(search: string, now: boolean) {
     clearTimeout(this.searchTimerId);
 
+    if(!search) {
+        this.menuSelectedItem = undefined;
+        return;
+    }
+
     let timeout = 0;
     if (!now) {
       switch (search.length) {
-        case 0:
-          this.menuSelectedItem = undefined;
-          return;
         case 1:
           timeout = 2000;
           break;
@@ -92,10 +94,8 @@ export class AppSearchBox {
       case 'Enter':
         {
           const value = (event.target as HTMLInputElement).value.trim();
-          if(value.length>0) {
-            this.startSearch(value, true);
-            event.stopPropagation();
-          }
+          this.startSearch(value, true);
+          event.stopPropagation();
         }
         break;
       case 'Escape':
