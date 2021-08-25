@@ -14,7 +14,7 @@ export interface AppMenuItem {
   selector: 'app-search-box',
   templateUrl: 'app-search-box.component.html',
   inputs: ['inputPlaceholder', 'queryPath : entities', 'notFoundPlaceholder: notFound', 'hint', 'formFieldClass'],
-  styleUrls: ['dialog.components.css', 'home.component.css'],
+  styleUrls: ['../dialogs/dialog.components.css', '../home/home.component.css'],
   exportAs: 'appSearchBox'
 })
 export class AppSearchBox {

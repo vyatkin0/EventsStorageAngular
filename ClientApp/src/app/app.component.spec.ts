@@ -1,55 +1,25 @@
-import { DialogAddEvent, DialogAddFile, DialogAddSubject, DialogConfirm } from './dialogs/dialog.components';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AppComponent } from './app.component';
+import {AppModule} from './app.module';
 import {AppSearchBox} from './components/app-search-box.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
-import { HomeComponent } from './home/home.component';
-import { MaterialModule } from './material.module';
-import { TestBed } from '@angular/core/testing';
-import {TrimEllipsisPipe} from './app.module';
+import {HarnessLoader} from '@angular/cdk/testing';
+import {MatInputHarness} from '@angular/material/input/testing';
+import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
 
-describe('AppComponent', () => {
+let loader: HarnessLoader;
+
+describe('AppSearchBox', () => {
+  let fixture: ComponentFixture<AppSearchBox>;
+
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [
-        AppComponent,
-        HomeComponent,
-        DialogAddSubject,
-        DialogAddFile,
-        DialogAddEvent,
-        DialogConfirm,
-        AppSearchBox,
-        TrimEllipsisPipe
-      ],
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        MaterialModule
-      ],
-    }).compileComponents();
+    await TestBed.configureTestingModule({imports: [AppModule], declarations: [AppSearchBox]})
+        .compileComponents();
+    fixture = TestBed.createComponent(AppSearchBox);
+    loader = TestbedHarnessEnvironment.loader(fixture);
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
-
-  /*
-  it(`should have as title 'ClientApp'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('ClientApp');
-  });
-*/
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('ClientApp app is running!');
+  it('should work', async () => {
+    const inputs = await loader.getAllHarnesses(MatInputHarness);
+    const input = await loader.getHarness(MatInputHarness);
   });
 });
