@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AppComponent } from './app.component';
-import {AppModule} from './app.module';
-import {AppSearchBox} from './components/app-search-box.component';
-import {HarnessLoader} from '@angular/cdk/testing';
-import {MatInputHarness} from '@angular/material/input/testing';
-import {TestbedHarnessEnvironment} from '@angular/cdk/testing/testbed';
+import { AppModule } from './app.module';
+import { AppSearchBox } from './components/app-search-box.component';
+import { HarnessLoader } from '@angular/cdk/testing';
+import { MatInputHarness } from '@angular/material/input/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 
 describe('AppSearchBox', () => {
   let fixture: ComponentFixture<AppSearchBox>;
