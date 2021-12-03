@@ -23,7 +23,7 @@ export class DialogAddFile {
   uploading: boolean = false;
   added: boolean = false;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {eventId: string}, public dialogRef: MatDialogRef<DialogAddEvent>) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: {eventId: string}, public dialogRef: MatDialogRef<DialogAddFile>) { }
 
   onChangeFile(event: Event) {
       const files: FileList = (event.target as any)?.files;
@@ -130,7 +130,7 @@ export class DialogAddEvent {
   styleUrls: ['dialog.components.css'],
 })
 export class DialogConfirm {
-  constructor(public dialogRef: MatDialogRef<DialogAddEvent>,
+  constructor(public dialogRef: MatDialogRef<DialogConfirm>,
     @Inject(MAT_DIALOG_DATA) public data: {title: string, message: string}) {
   }
   onYes(): void {
