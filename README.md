@@ -1,6 +1,8 @@
 # EventsStorageAngular
 Example of asp .net 5.0 single page web application that based on Angular Material Design web components.
 
+It is available for playing by url https://events-storage-angular-fcn7f4ebeq-uc.a.run.app/
+
 These are generic installation instructions.
 
 Edit database connection string in file appsettings.json;
