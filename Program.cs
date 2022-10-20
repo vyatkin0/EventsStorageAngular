@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace SbergileSquadsWebApp
 {
@@ -15,7 +16,11 @@ namespace SbergileSquadsWebApp
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    string port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+
+                    webBuilder
+                        .UseUrls($"http://0.0.0.0:{port}")
+                        .UseStartup<Startup>();
                 }).ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();

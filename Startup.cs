@@ -20,12 +20,11 @@ namespace SbergileSquadsWebApp
 
         private IConfiguration Configuration { get; }
         private IWebHostEnvironment Environment { get; }
-        private bool IsDevEnv() => Environment.IsDevelopment() || Environment.IsEnvironment("dev") || Environment.IsEnvironment("test") || Environment.IsEnvironment("psi");
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            if (IsDevEnv())
+            if (Environment.IsDevelopment())
             {
                 services.AddCors(options =>
                 {
@@ -74,7 +73,10 @@ namespace SbergileSquadsWebApp
 
             app.UseAuthorization();
 
-            app.UseCors(_appOrigins);
+            if (Environment.IsDevelopment())
+            {
+                app.UseCors(_appOrigins);
+            }
 
             app.UseEndpoints(endpoints =>
             {
